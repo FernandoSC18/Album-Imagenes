@@ -4,7 +4,6 @@ Install Docker [Docker](https://docs.docker.com )
 ### Como ejecutar este proyecto.
 
 
-
 Teniedo en cuenta la siguiente estructura de las carpetas:
 
 PROYECT_FOLDER
@@ -43,12 +42,16 @@ correcto funcionamiento y sera preferibe eliminar los volumenes e imagenes si es
 ```
   ./connect_db_container.sh
 ```
+Nota: Los contenedores pueden demorar en levantarse, ejecuta el comando "docker container ls" y verifica el estatus UP.
+
 5. Carga el sql que generaste al principio, hazlo ejecutando el siguiente script, espera hasta que termine el proceso.
 
 ```
   ./populate_data.sh
 ```
 6. Abre localhost:8080 y deberias ver el proyecto angular.
+
+
 
 
 
