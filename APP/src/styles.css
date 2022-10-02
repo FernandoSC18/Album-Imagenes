@@ -1,0 +1,13 @@
+/* You can add global styles to this file, and also import other style files */
+
+body {
+    background: -webkit-radial-gradient(to bottom, #f7cdff, #bdd8ff, #c1fbff);
+    background: radial-gradient(  #f7cdff, #bdd8ff, #c1fbff);
+    height: 100vh;
+    margin: 10px 20px;
+}
+
+.err-text {
+  color: red;
+  white-space: pre-wrap;
+}

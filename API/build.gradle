@@ -1,0 +1,35 @@
+plugins {
+	id 'org.springframework.boot' version '2.7.4'
+	id 'io.spring.dependency-management' version '1.0.14.RELEASE'
+	id 'java'
+	id 'war'
+}
+
+group = 'com.example'
+version = '0.0.1-release'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web:2.7.4'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.4'
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat:2.7.4'
+
+	//MySql conector
+	providedRuntime 'mysql:mysql-connector-java:8.0.30' 
+
+	//Security : Only for CORS because login and users not exists in proyect 
+	implementation 'org.springframework.boot:spring-boot-starter-security:2.7.2'
+	implementation 'org.springframework.security:spring-security-config:5.7.2' 
+
+	//TEST
+	testImplementation 'org.springframework.boot:spring-boot-starter-test:2.7.4'
+}
+ 
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

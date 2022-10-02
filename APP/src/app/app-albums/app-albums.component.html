@@ -1,0 +1,107 @@
+<!-- MODAL TO DELETE AN ALBUM -->
+<ng-template #contentDel let-modalAlbumDelete>
+
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Eliminar</h4>
+		<button type="button" class="btn-close" aria-label="Close"
+			(click)="modalAlbumDelete.dismiss('Cross click')"></button>
+	</div>
+	<div class="modal-body">
+		<H4> Estas a punto de eliminar un álbum, esta accion eliminara todas las imagenes
+			que contenga el álbum.
+		</H4>
+		<H4> ¿Estas seguro que deseas eliminar este álbum? </H4>
+
+    <H4 class="err-text">{{currentAlbum.albumName}} </H4>
+
+    <button type="button" class="btn btn-danger" (click)="deleteAlbum(modalAlbumDelete)">Si, Eliminar</button>
+    {{' '}}
+    <button type="button" class="btn btn-outline-dark" (click)="modalAlbumDelete.close()">Cancelar</button>
+
+	</div>
+</ng-template>
+
+<!-- MODAL TO ADD OR EDIT AN ALBUM -->
+<ng-template #contentAdd let-modalAlbumAdd>
+
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Álbum</h4>
+		<button type="button" class="btn-close" aria-label="Close"
+			(click)="modalAlbumAdd.dismiss('Cross click')"></button>
+	</div>
+	<div class="modal-body">
+		<form>
+			<div class="form-group">
+        <!-- name is mandatory -->
+				<label for="albumName">Nombre</label>
+				<input name="albumName" id="albumName" [(ngModel)]="currentAlbum.albumName" class="form-control"
+					placeholder="nombre" maxlength="50"/>
+			</div>
+			<div class="form-group">
+				<label for="albumDescription">Description</label>
+				<textarea id="albumDescription" name="albumDescription" [(ngModel)]="currentAlbum.albumDescription"
+					class="form-control" placeholder="nombre" maxlength="500"></textarea>
+			</div>
+
+			<div class="form-group">
+				<br>
+				<p class="err-text">{{currentValidation}} </p>
+			</div>
+
+      <!-- Seccion bottons -->
+      <div class="d-flex justify-content-between">
+        <!-- btn save always shows, onClick send modal for then close it when process finaliced -->
+        <!-- DIsable botton whe it is running procces to avoid duplicaded insert -->
+        <button type="button" class="btn btn-primary" (click)="saveAlbum(modalAlbumAdd)"
+        [disabled]="isModalLoading">Guardar Cambios</button>
+
+        <!-- show spinner when is loading -->
+        <div *ngIf="isModalLoading" class="spinner-border" role="status">
+          <span class="sr-only"></span>
+        </div>
+      </div>
+
+		</form>
+	</div>
+</ng-template>
+
+<!-- OPEN MODAL ADD AN ALBUM -->
+<button type="button" class="btn btn-primary" (click)="openModalAdd(contentAdd)">Agregar Álbum</button>
+
+<!-- TABLE FOR ALBUN DISPLAY DATA -->
+<table class="table">
+	<thead>
+		<tr>
+			<th scope="col">#</th>
+			<th scope="col">ID</th>
+			<th scope="col">Nombre</th>
+			<th scope="col">Descripción</th>
+			<th scope="col">Acciones</th>
+		</tr>
+	</thead>
+	<tbody>
+
+	  <!-- For all albums-->
+		<tr *ngFor="let album of albums; let index = index;">
+			<th scope="row">{{index + 1}}</th>
+			<td>{{album.albumId}}</td>
+			<td>{{album.albumName}}</td>
+			<td>{{album.albumDescription}}</td>
+			<td>
+				<div class="container w-100" style="margin: 5px;">
+					<!-- OPEN IMAGES FROM SELECTED ALBUM SECTION-->
+          <a class="btn btn-success w-100" [routerLink]="['/images', album.albumId]"
+          routerLinkActive="router-link-active" ariaCurrentWhenActive="page">Abrir</a>
+				</div>
+				<div class="container" style="margin: 5px;">
+					<!-- OPEN MODAL EDIT AN ALBUM -->
+					<button type="button" class="btn btn-primary w-100" (click)="openModalAdd(contentAdd, index)">Editar</button>
+				</div>
+				<div class="container" style="margin: 5px;">
+					<button type="button" class="btn btn-danger w-100" (click)="openModalDelete(contentDel, index)">Eliminar</button>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<router-outlet></router-outlet>

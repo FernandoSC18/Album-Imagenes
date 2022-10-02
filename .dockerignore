@@ -1,0 +1,8 @@
+#TEMP FILES ARE EXCLUDES
+*/temp*
+*/*/temp*
+
+#API EXCLUDES
+*/build
+*/*/build
+

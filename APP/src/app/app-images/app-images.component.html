@@ -1,0 +1,107 @@
+<!-- MODAL DETAIL OF AN IMAGE -->
+<ng-template #contentImageDetail let-modalImage>
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Imagen</h4>
+		<button type="button" class="btn-close" aria-label="Close"
+			(click)="modalImage.dismiss('Cross click')"></button>
+	</div>
+	<div class="modal-body">
+    <img class="card-img-top"
+      src="{{curretImage.file.fileData}}"
+      alt="{{curretImage.file.fileDescription}}">
+    <br/><br/>
+
+    <!-- Input to change image
+    <button type="button" class="btn btn-outline-secondary" (click)="modalImage.close()">Seleccionar imagen</button>
+    -->
+    <div class="form-group">
+      <label for="albumDescription">Seleccionar imagen</label>
+      <input id="albumDescription" name="albumDescription"
+        accept="image/png, image/jpeg"
+        type="file" (change)="changeImage($event)"
+        class="form-control" />
+    </div>
+    <!-- Seccion Inputs-->
+    <div class="form-group">
+      <label for="albumDescription">Nombre de Imagen</label>
+      <input id="albumDescription" name="albumDescription" [(ngModel)]="curretImage.imageName"
+        class="form-control" placeholder="nombre" maxlength="50"/>
+    </div>
+    <div class="form-group">
+      <label for="albumDescription">Descipcion de Imagen</label>
+      <textarea id="albumDescription" name="albumDescription" [(ngModel)]="curretImage.imageDescription"
+        class="form-control" placeholder="nombre" maxlength="500"></textarea>
+    </div>
+
+    <div class="form-group">
+      <br>
+      <p class="err-text">{{currentValidation}} </p>
+    </div>
+
+    <!-- Seccion bottons -->
+    <div class="d-flex justify-content-between">
+      <!-- Show only when id found, then regiter exist -->
+      <button *ngIf="curretImage.imageId" type="button" class="btn btn-danger"
+      (click)="deleteImage(modalImage)" >Eliminar Imagen</button>
+      <!-- btn save always shows, onClick send modal for then close it when process finaliced -->
+      <!-- DIsable botton whe it is running procces to avoid duplicaded insert -->
+      <button type="button" class="btn btn-primary" (click)="saveChanges(modalImage)"
+      [disabled]="isModalLoading">Guardar Cambios</button>
+
+      <!-- show spinner when is loading -->
+      <div *ngIf="isModalLoading" class="spinner-border" role="status">
+        <span class="sr-only"></span>
+      </div>
+
+    </div>
+	</div>
+</ng-template>
+
+
+<!-- BODY OF THIS COMPONENT -->
+<h1 style="text-align: center;" class="container">{{images && images[0] && images[0].album ? images[0].album.albumName : null}}</h1>
+
+<!-- Seccion bottons -->
+<div class="d-flex justify-content-between">
+
+  <!-- Botton create new image record -->
+  <button class="container btn btn-outline-dark w-25 d-flex justify-content-around"
+    type="button" (click)="openModalImageDetail(contentImageDetail)" >Agregar nueva imagen</button>
+
+  <!-- Search botton filter by name -->
+  <div class="container w-25 d-flex justify-content-around">
+    <input mdbInput type="search" id="form1" class="form-control" [(ngModel)]="filterName"/>
+    <button type="button" class="btn btn-primary" (click)="applyFilter()" >
+      <i class="fas fa-search"> Search </i>
+    </button>
+  </div>
+  <br/>
+
+</div>
+<br/><br/>
+
+<div style="text-align: center;" class="container">
+  <!-- For all images -->
+  <!-- card-image-hover css style for hover effects -->
+
+  <div class="card card-image-hover" style="width: 18rem; display: inline-block; margin: 5px;"
+  *ngFor="let image of images; let index = index;"
+  (click)="openModalImageDetail(contentImageDetail, index)">
+
+    <img class="card-img-top" src="{{image.file.fileData}}" alt="{{image.file.fileDescription}}">
+    <div class="card-body">
+      <h5 class="card-title">{{image.imageName}}</h5>
+      <p class="card-text">{{image.imageDescription}}</p>
+    </div>
+  </div>
+</div>
+
+<br>
+<!-- Load more images by defined chunk-->
+<button class="container btn btn-primary w-25 d-flex justify-content-around"
+  (click)="loadNextChunkImages( )"
+  type="button" >Cargar mas</button>
+
+  <!-- button-sperator css style for separate fotter whit margin space -->
+<div class="button-sperator"></div>
+<router-outlet></router-outlet>

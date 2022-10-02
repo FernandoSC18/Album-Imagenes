@@ -1,0 +1,64 @@
+version: '3.9'
+services:
+  ##DATABASE MYSQL
+  db_mysql:
+    container_name: $DB_CONTAINER_NAME    
+    ##restart: on-failure
+    build: 
+      context: .
+      dockerfile: Dockerfile.db
+      args:
+        - DB_WORKDIR=$DB_WORKDIR
+        - DB_DIRNAME=$DB_DIRNAME
+    healthcheck:
+      test: "exit 0"
+    #mapping file .env with scripts sh and if it requierd run someone
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: $DB_ROOT_PASSWORD
+      MYSQL_DATABASE: $DB_DATABASE
+      MYSQL_USER: $DB_USER_API
+      MYSQL_PASSWORD: $DB_USER_API_PASSWORD
+    ports:
+      - $DB_PORT:33060
+    volumes:      
+      #Shared Folder DB whit host and container
+      - ./${DB_DIRNAME}:${DB_WORKDIR}/${DB_DIRNAME}
+      #Store database data
+      - mysql-data:/var/lib/mysql
+  #API SERVER
+  api:
+    container_name: $API_CONTAINER_NAME
+    image: $API_IMAGE_NAME:$API_IMAGE_VERSION
+    restart: on-failure
+    links:
+      - db_mysql
+    depends_on:
+      db_mysql:
+        condition: service_healthy
+    #mapping file .env with scripts sh and if it requierd run someone
+    env_file:
+      - .env
+    #Mapping some environment vars from .env to Container ENVIRONMENT and use this in application.properties
+    environment:
+      API_SERVER_PORT: $API_SERVER_PORT
+      DB_PORT: $DB_PORT
+      DB_NAME: $DB_DATABASE
+      DB_API_USER: $DB_USER_API
+      DB_API_PASSWORD: $DB_USER_API_PASSWORD
+    entrypoint:
+      - sh
+      - ${API_WORKDIR}/${API_DIRNAME}/docker_entrypoint.sh
+    ports:
+      - $API_SERVER_PORT:8080
+    volumes:
+      #Shared Folder API whit host and container
+      - ./${API_DIRNAME}:${API_WORKDIR}/${API_DIRNAME}
+      #Store graddle data avoid download foreach run
+      - graddle-data:/root/.gradle
+volumes:
+  jenkins-cert:
+  jenkins-data:
+  graddle-data:
+  mysql-data:

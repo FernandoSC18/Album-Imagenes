@@ -1,0 +1,5 @@
+FROM mysql   
+ARG DB_DIRNAME
+ENV ENV_DB_DIRNAME=${DB_DIRNAME}
+##ADD file initdb.sql, this file is the initial database script
+ADD ${ENV_DB_DIRNAME}/initdb.sql /docker-entrypoint-initdb.d
