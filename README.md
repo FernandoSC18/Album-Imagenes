@@ -21,7 +21,7 @@ PROYECT_FOLDER
   git clone https://github.com/FernandoSC18/Album-Imagenes.git
 ```
 
-2. Genera un sql con instrucciones insert, este repetira las imagenes hasta conseguir un total de mas de 10000 registros. para eso hubucate en el Folder DB "cd DB"
+2. Genera un sql con instrucciones insert, este repetira las imagenes hasta conseguir un total de mas de 10000 registros. para eso hubicate en el Folder PROYECT_FOLDER/DB "cd Album-Imagenes/DB"
     
 ```
   ./create_sql_populate.sh
